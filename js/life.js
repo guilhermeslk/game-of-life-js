@@ -30,7 +30,7 @@ Board.prototype.isPositionValid = function( x, y ) {
     return ( x >= 0 && y >= 0 && x < this.width && y < this.height );
 }
 
-Board.prototype.isCellLive = function( x, y ) {
+Board.prototype.isCellAlive = function( x, y ) {
     return this.isPositionValid( x, y ) && this.rows[x][y] === LIVE_CELL;
 }
 
@@ -59,7 +59,7 @@ Board.prototype.render = function( el ) {
         $row = $('<div class="row"></div>');
 
         $.each(row, function( y, cell ) {
-            $cell = $('<div class="cell ' + ( self.isCellLive( x, y ) ? 'live' : 'dead' ) + '"></div>');
+            $cell = $('<div class="cell ' + ( self.isCellAlive( x, y ) ? 'live' : 'dead' ) + '"></div>');
             $row.append($cell);
         });
 
