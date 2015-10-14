@@ -15,7 +15,7 @@ Board.prototype.initialize = function ( cells ) {
     for ( var i = 0; i < cells.length; i ++ ) {
         this.createCell( cells[i].x, cells[i].y );
     }
-    this.render('body');
+    this.render();
 }
 
 Board.prototype.addRow = function() {
