@@ -81,23 +81,25 @@ Board.prototype.evolve = function () {
     });
 }
 
-Board.prototype.render = function( el ) {
+Board.prototype.render = function() {
     var self = this;
-    var $board = $('<div class="board"></div>');
-    var $row = null;
-    var $cell = null;
 
-    $.each(self.rows, function( x, row ) {
+    var boardDiv = document.createElement('div');
+    var rowDiv = null;
+    var cellDiv = null;
 
-        $row = $('<div class="row"></div>');
+    self.rows.forEach(function( row, x ) {
+        rowDiv = document.createElement('div');
+        rowDiv.className = 'row';
 
-        $.each(row, function( y, cell ) {
-            $cell = $('<div class="cell ' + ( self.isCellAlive( x, y ) ? 'live' : 'dead' ) + '"></div>');
-            $row.append($cell);
+        row.forEach(function( cell, y ) {
+            cellDiv = document.createElement('div');
+            cellDiv.className = 'cell ' + (self.isCellAlive( x, y ) ? 'live' : 'dead');
+            rowDiv.appendChild(cellDiv);
         });
 
-        $board.append($row);
+        boardDiv.appendChild(rowDiv);
     });
-
-    $(el).html($board);
+    boardDiv.className = 'board';
+    document.body.innerHTML = boardDiv.outerHTML;
 }

@@ -6,7 +6,6 @@
         <title>Game Of Life</title>
     </head>
     <body>
-        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="js/life.js"></script>
         <script type="text/javascript" src="js/patterns.js"></script>
         <script type="text/javascript">
@@ -14,17 +13,16 @@
                 return Patterns.Spaceships.LWSS;
             }
 
-            $(document).ready(function() {
+            window.onload = function() {
                 var board =  new Board(40);
 
                 board.initialize(populate());
 
                 setInterval(function () {
                     board.evolve();
-                    board.render('body');
+                    board.render();
                 }, 100);
-
-            });
+            }
         </script>
     </body>
 </html>
