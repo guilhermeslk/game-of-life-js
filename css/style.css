@@ -1,0 +1,25 @@
+.board {
+    margin: 0 auto;
+    width: 1000px;
+}
+
+.row {
+    display: block;
+    clear: both;
+}
+
+.cell {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    margin: .5px;
+    float: left;
+}
+
+.live {
+    background-color: #000;
+}
+
+.dead {
+    background-color: #fff;
+}

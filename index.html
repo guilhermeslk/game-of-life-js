@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/style.css">
+        <title>Game Of Life</title>
+    </head>
+    <body>
+        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="js/life.js"></script>
+        <script type="text/javascript">
+            var populate = function() {
+                return [
+                    { x: 0, y: 0 },
+                    { x: 1, y: 0 },
+                    { x: 2, y: 0 }
+                ];
+            }
+            $(document).ready(function() {
+                var board =  new Board(40);
+
+                board.initialize(populate());
+
+                setInterval(function () {
+                    /*
+                       board.evolve()
+                       board.render('body');
+                     */
+                }, 1000);
+            });
+        </script>
+    </body>
+</html>
