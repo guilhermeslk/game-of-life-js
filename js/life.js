@@ -67,9 +67,9 @@ Board.prototype.evolve = function () {
     self.rows.forEach( function( row, x, array ) {
         row.forEach( function( cell, y, array) {
             var neighbours = self.getCellNeighboursCount( x, y );
-            if ( neighbours < 2 || neighbours > 3) {
+            if ( ( neighbours < 2 || neighbours > 3 ) && self.isCellAlive( x, y ) ) {
                 birthsAndDeaths.push({ x: x, y: y, state: DEAD_CELL});
-            } else if ( neighbours === 3 ) {
+            } else if ( neighbours === 3 && !self.isCellAlive( x, y ) ) {
                 birthsAndDeaths.push({ x: x, y: y, state: LIVE_CELL});
             }
         });
