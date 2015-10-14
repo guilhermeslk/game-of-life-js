@@ -1,3 +1,8 @@
+body {
+    background-color: #D5DCDE;
+    margin-top: 50px;
+}
+
 .board {
     margin: 0 auto;
     width: 1000px;
@@ -11,15 +16,14 @@
 .cell {
     width: 20px;
     height: 20px;
-    border: 1px solid #000;
-    margin: .5px;
+    margin: 1px;
     float: left;
 }
 
 .live {
-    background-color: #000;
+    background-color: #2A2D2E;
 }
 
 .dead {
-    background-color: #fff;
+    background-color: #E9EEF0;
 }
