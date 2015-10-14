@@ -38,6 +38,10 @@ Board.prototype.createCell = function( x, y ) {
     this.rows[x][y] = LIVE_CELL;
 }
 
+Board.prototype.killCell = function( x, y ) {
+    this.rows[x][y] = DEAD_CELL;
+}
+
 Board.prototype.getCellNeighboursCount = function ( x, y ) {
 
     var neighbours = 0;
