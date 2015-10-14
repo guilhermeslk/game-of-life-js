@@ -61,17 +61,23 @@ Board.prototype.getCellNeighboursCount = function ( x, y ) {
 }
 
 Board.prototype.evolve = function () {
-    var self = this;
+   var self = this;
+   var birthsAndDeaths = [];
 
     self.rows.forEach( function( row, x, array ) {
         row.forEach( function( cell, y, array) {
             var neighbours = self.getCellNeighboursCount( x, y );
             if ( neighbours < 2 || neighbours > 3) {
-                self.killCell( x, y );
+                birthsAndDeaths.push({ x: x, y: y, state: DEAD_CELL});
             } else if ( neighbours === 3 ) {
-                self.createCell( x, y );
+                birthsAndDeaths.push({ x: x, y: y, state: LIVE_CELL});
             }
         });
+    });
+
+    birthsAndDeaths.forEach( function( element ) {
+        if ( element.state === DEAD_CELL ) self.killCell( element.x, element.y );
+        else self.createCell( element.x, element.y );
     });
 }
 
