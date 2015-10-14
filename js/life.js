@@ -38,6 +38,24 @@ Board.prototype.createCell = function( x, y ) {
     this.rows[x][y] = LIVE_CELL;
 }
 
+Board.prototype.getCellNeighboursCount = function ( x, y ) {
+
+    var neighbours = 0;
+
+    if ( this.isCellAlive( x - 1, y - 1 ) ) neighbours ++;
+    if ( this.isCellAlive( x - 1, y ) ) neighbours ++;
+    if ( this.isCellAlive( x - 1, y + 1) ) neighbours ++;
+
+    if ( this.isCellAlive( x , y - 1) ) neighbours ++;
+    if ( this.isCellAlive( x , y + 1) ) neighbours ++;
+
+    if ( this.isCellAlive( x + 1 , y - 1) ) neighbours ++;
+    if ( this.isCellAlive( x + 1 , y ) ) neighbours ++;
+    if ( this.isCellAlive( x + 1 , y + 1) ) neighbours ++;
+
+    return neighbours;
+}
+
 Board.prototype.evolve = function () {
     var self = this;
 
