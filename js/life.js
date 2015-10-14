@@ -65,7 +65,12 @@ Board.prototype.evolve = function () {
 
     self.rows.forEach( function( row, x, array ) {
         row.forEach( function( cell, y, array) {
-
+            var neighbours = self.getCellNeighboursCount( x, y );
+            if ( neighbours < 2 || neighbours > 3) {
+                self.killCell( x, y );
+            } else if ( neighbours === 3 ) {
+                self.createCell( x, y );
+            }
         });
     });
 }
