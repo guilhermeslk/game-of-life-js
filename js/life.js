@@ -81,12 +81,14 @@ Board.prototype.evolve = function () {
     });
 }
 
-Board.prototype.render = function() {
+Board.prototype.render = function( container ) {
     var self = this;
 
     var boardDiv = document.createElement('div');
     var rowDiv = null;
     var cellDiv = null;
+
+    container = container || 'container';
 
     self.rows.forEach(function( row, y ) {
         rowDiv = document.createElement('div');
@@ -101,5 +103,5 @@ Board.prototype.render = function() {
         boardDiv.appendChild(rowDiv);
     });
     boardDiv.className = 'board';
-    document.body.innerHTML = boardDiv.outerHTML;
+    document.getElementsByClassName(container)[0].innerHTML = boardDiv.outerHTML;
 }

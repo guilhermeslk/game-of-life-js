@@ -6,22 +6,42 @@
         <title>Game Of Life</title>
     </head>
     <body>
+        <div class="content">
+            <div class="container"></div>
+            <div class="controls">
+                <input id="interval" type="number" value="" placeholder="Interval (default = 100)"/>
+                <button id="start" class="btn">Start</button>
+            </div>
+        </div>
         <script type="text/javascript" src="js/life.js"></script>
         <script type="text/javascript" src="js/patterns.js"></script>
         <script type="text/javascript">
             var populate = function() {
                 return Patterns.Spaceships.LWSS;
             }
+            var timer = null;
 
             window.onload = function() {
-                var board =  new Board(40);
-
+                var board = new Board(40);
                 board.initialize(populate());
 
-                setInterval(function () {
-                    board.evolve();
-                    board.render();
-                }, 100);
+                var btnStart = document.getElementById('start');
+                var inputInterval = document.getElementById('interval');
+
+                btnStart.addEventListener('click', function(e) {
+                    var interval = inputInterval.value != '' ? inputInterval.value : 100;
+
+                    if ( this.firstChild.data === 'Start' ) {
+                        timer = setInterval(function () {
+                            board.evolve();
+                            board.render();
+                        }, interval);
+                        this.firstChild.data = 'Pause';
+                    } else {
+                        clearInterval(timer);
+                        this.firstChild.data = 'Start';
+                    }
+                });
             }
         </script>
     </body>

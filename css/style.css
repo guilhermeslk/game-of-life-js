@@ -1,11 +1,16 @@
 body {
     background-color: #D5DCDE;
-    margin-top: 50px;
+    margin: 50px 100px;
+}
+.content {
+    margin: 0 auto;
+    width: 800px;
 }
 
-.board {
-    margin: 0 auto;
-    width: 1000px;
+.controls {
+    text-align: center;
+    clear: both;
+    padding: 5px;
 }
 
 .row {
@@ -14,8 +19,8 @@ body {
 }
 
 .cell {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     margin: 1px;
     float: left;
 }
@@ -26,4 +31,13 @@ body {
 
 .dead {
     background-color: #E9EEF0;
+}
+
+.btn {
+    background-color: #f5f5f5;
+    padding: 5px;
+}
+
+input {
+    line-height: 1.8;
 }
