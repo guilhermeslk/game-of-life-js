@@ -13,7 +13,7 @@ function Board(size) {
 
 Board.prototype.initialize = function ( cells ) {
     for ( var i = 0; i < cells.length; i ++ ) {
-        this.createCell( cells[i].x, cells[i].y );
+        this.createCell( cells[i].y, cells[i].x );
     }
     this.render();
 }
@@ -26,36 +26,36 @@ Board.prototype.addRow = function() {
     this.rows.push(row);
 }
 
-Board.prototype.isPositionValid = function( x, y ) {
+Board.prototype.isPositionValid = function( y, x ) {
     return ( x >= 0 && y >= 0 && x < this.width && y < this.height );
 }
 
-Board.prototype.isCellAlive = function( x, y ) {
-    return this.isPositionValid( x, y ) && this.rows[x][y] === LIVE_CELL;
+Board.prototype.isCellAlive = function( y, x ) {
+    return this.isPositionValid( y, x ) && this.rows[y][x] === LIVE_CELL;
 }
 
-Board.prototype.createCell = function( x, y ) {
-    this.rows[x][y] = LIVE_CELL;
+Board.prototype.createCell = function( y, x ) {
+    this.rows[y][x] = LIVE_CELL;
 }
 
-Board.prototype.killCell = function( x, y ) {
-    this.rows[x][y] = DEAD_CELL;
+Board.prototype.killCell = function( y, x ) {
+    this.rows[y][x] = DEAD_CELL;
 }
 
-Board.prototype.getCellNeighboursCount = function ( x, y ) {
+Board.prototype.getCellNeighboursCount = function ( y, x ) {
 
     var neighbours = 0;
 
-    if ( this.isCellAlive( x - 1, y - 1 ) ) neighbours ++;
-    if ( this.isCellAlive( x - 1, y ) ) neighbours ++;
-    if ( this.isCellAlive( x - 1, y + 1) ) neighbours ++;
+    if ( this.isCellAlive( y - 1, x - 1 ) ) neighbours ++;
+    if ( this.isCellAlive( y - 1, x ) ) neighbours ++;
+    if ( this.isCellAlive( y - 1, x + 1) ) neighbours ++;
 
-    if ( this.isCellAlive( x , y - 1) ) neighbours ++;
-    if ( this.isCellAlive( x , y + 1) ) neighbours ++;
+    if ( this.isCellAlive( y , x - 1) ) neighbours ++;
+    if ( this.isCellAlive( y , x + 1) ) neighbours ++;
 
-    if ( this.isCellAlive( x + 1 , y - 1) ) neighbours ++;
-    if ( this.isCellAlive( x + 1 , y ) ) neighbours ++;
-    if ( this.isCellAlive( x + 1 , y + 1) ) neighbours ++;
+    if ( this.isCellAlive( y + 1 , x - 1) ) neighbours ++;
+    if ( this.isCellAlive( y + 1 , x ) ) neighbours ++;
+    if ( this.isCellAlive( y + 1 , x + 1) ) neighbours ++;
 
     return neighbours;
 }
@@ -64,20 +64,20 @@ Board.prototype.evolve = function () {
    var self = this;
    var birthsAndDeaths = [];
 
-    self.rows.forEach( function( row, x, array ) {
-        row.forEach( function( cell, y, array) {
-            var neighbours = self.getCellNeighboursCount( x, y );
-            if ( ( neighbours < 2 || neighbours > 3 ) && self.isCellAlive( x, y ) ) {
+    self.rows.forEach( function( row, y, array ) {
+        row.forEach( function( cell, x, array) {
+            var neighbours = self.getCellNeighboursCount( y, x );
+            if ( ( neighbours < 2 || neighbours > 3 ) && self.isCellAlive( y, x ) ) {
                 birthsAndDeaths.push({ x: x, y: y, state: DEAD_CELL});
-            } else if ( neighbours === 3 && !self.isCellAlive( x, y ) ) {
+            } else if ( neighbours === 3 && !self.isCellAlive( y, x ) ) {
                 birthsAndDeaths.push({ x: x, y: y, state: LIVE_CELL});
             }
         });
     });
 
     birthsAndDeaths.forEach( function( element ) {
-        if ( element.state === DEAD_CELL ) self.killCell( element.x, element.y );
-        else self.createCell( element.x, element.y );
+        if ( element.state === DEAD_CELL ) self.killCell( element.y, element.x );
+        else self.createCell( element.y, element.x );
     });
 }
 
@@ -88,13 +88,13 @@ Board.prototype.render = function() {
     var rowDiv = null;
     var cellDiv = null;
 
-    self.rows.forEach(function( row, x ) {
+    self.rows.forEach(function( row, y ) {
         rowDiv = document.createElement('div');
         rowDiv.className = 'row';
 
-        row.forEach(function( cell, y ) {
+        row.forEach(function( cell, x ) {
             cellDiv = document.createElement('div');
-            cellDiv.className = 'cell ' + (self.isCellAlive( x, y ) ? 'live' : 'dead');
+            cellDiv.className = 'cell ' + (self.isCellAlive( y, x ) ? 'live' : 'dead');
             rowDiv.appendChild(cellDiv);
         });
 
