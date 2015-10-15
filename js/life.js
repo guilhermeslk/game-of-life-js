@@ -4,14 +4,18 @@ var LIVE_CELL = 1;
 function Board(size) {
     this.width = size;
     this.height = size;
-    this.rows = [];
 
+    this.reset();
+}
+
+Board.prototype.reset = function() {
+    this.rows = [];
     for ( var i = 0; i < this.height; i++ ) {
         this.addRow();
     }
 }
 
-Board.prototype.initialize = function ( cells ) {
+Board.prototype.initialize = function( cells ) {
     for ( var i = 0; i < cells.length; i ++ ) {
         this.createCell( cells[i].x, cells[i].y );
     }
