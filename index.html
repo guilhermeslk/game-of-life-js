@@ -12,79 +12,15 @@
             <div class="container"></div>
             <div class="controls">
                 <select id="pattern">
-                    <option value="">Pattern</option>
+                    <option value="CUSTOM">CUSTOM</option>
                 </select>
                 <input id="interval" type="number" value="" placeholder="Interval (default = 100)"/>
                 <button id="start" class="btn">Start</button>
                 <button id="reset" class="btn">Reset</button>
             </div>
         </div>
-        <script type="text/javascript" src="js/life.js"></script>
         <script type="text/javascript" src="js/patterns.js"></script>
-        <script type="text/javascript">
-            var populate = function() {
-                return Patterns.Spaceships.GLIDER;
-            }
-
-            window.onload = function() {
-                var board = new Board(40);
-                board.initialize(populate());
-
-                var timer = null;
-                var btnStart = document.getElementById('start');
-                var btnReset = document.getElementById('reset');
-                var inputInterval = document.getElementById('interval');
-
-                var selPattern = document.getElementById('pattern');
-                var optgroup = null;
-                var option = null;
-
-                for ( group in Patterns ) {
-                    optgroup = document.createElement('optgroup');
-                    optgroup.label = group;
-                    for ( pattern in Patterns[group] ) {
-                        option = document.createElement('option');
-                        option.value = group + '.' + pattern;
-                        option.innerText = pattern;
-                        optgroup.appendChild(option);
-                    }
-                    selPattern.appendChild(optgroup);
-                }
-                selPattern.value = 'Spaceships.GLIDER';
-
-                selPattern.addEventListener('change', function(e) {
-                    if ( this.value.length > 0) {
-                        var data = eval('Patterns.' + this.value);
-                        board.reset();
-                        board.initialize(data);
-                    }
-                });
-
-                btnReset.addEventListener('click', function(e) {
-                    board.reset();
-                    board.render();
-
-                    selPattern.value = '';
-                    inputInterval.value = '';
-                    btnStart.firstChild.data = 'Start';
-                    clearInterval(timer);
-                });
-
-                btnStart.addEventListener('click', function(e) {
-                    var interval = inputInterval.value != '' ? inputInterval.value : 100;
-
-                    if ( this.firstChild.data === 'Start' ) {
-                        timer = setInterval(function () {
-                            board.evolve();
-                            board.render();
-                        }, interval);
-                        this.firstChild.data = 'Pause';
-                    } else {
-                        clearInterval(timer);
-                        this.firstChild.data = 'Start';
-                    }
-                });
-            }
-        </script>
+        <script type="text/javascript" src="js/life.js"></script>
+        <script type="text/javascript" src="js/ui.js"></script>
     </body>
 </html>
