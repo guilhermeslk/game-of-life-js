@@ -109,3 +109,29 @@ Board.prototype.render = function( container ) {
     boardDiv.className = 'board';
     document.getElementsByClassName(container)[0].innerHTML = boardDiv.outerHTML;
 }
+
+Board.prototype.getCoordinates = function( container ) {
+    container = container || 'container';
+
+    var rows = document.getElementsByClassName('row');
+    var cells = null;
+    var hasClass = false;
+    var result = [];
+
+    for ( var y = 0; y < rows.length; y++ ) {
+        cells = rows[y].children;
+        for ( var x = 0; x < cells.length; x++ ) {
+            if (cells[x].classList) {
+                hasClass = cells[x].classList.contains('live');
+            } else {
+                hasClass = new RegExp('(^| )live( |$)', 'gi').test(cells[x].className);
+            }
+            if ( hasClass ) {
+                result.push( { x: x, y: y });
+                hasClass = false;
+            }
+        }
+    }
+
+    return result;
+}
