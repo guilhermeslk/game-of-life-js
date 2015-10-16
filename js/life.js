@@ -1,7 +1,7 @@
 var DEAD_CELL = 0;
 var LIVE_CELL = 1;
 
-function Board(size) {
+function Board( size ) {
     this.width = size;
     this.height = size;
 
@@ -17,7 +17,7 @@ Board.prototype.reset = function() {
 
 Board.prototype.initialize = function( cells ) {
     for ( var i = 0; i < cells.length; i ++ ) {
-        this.createCell( cells[i].x, cells[i].y );
+        this.createCell( cells[ i ].x, cells[ i ].y );
     }
     this.render();
 }
@@ -25,9 +25,9 @@ Board.prototype.initialize = function( cells ) {
 Board.prototype.addRow = function() {
     var row = [];
     for ( var i = 0; i < this.width; i++ ) {
-        row.push(DEAD_CELL);
+        row.push( DEAD_CELL );
     }
-    this.rows.push(row);
+    this.rows.push( row );
 }
 
 Board.prototype.isPositionValid = function( x, y ) {
@@ -35,15 +35,15 @@ Board.prototype.isPositionValid = function( x, y ) {
 }
 
 Board.prototype.isCellAlive = function( x, y ) {
-    return this.isPositionValid( x, y ) && this.rows[y][x] === LIVE_CELL;
+    return this.isPositionValid( x, y ) && this.rows[ y ][ x ] === LIVE_CELL;
 }
 
 Board.prototype.createCell = function( x, y ) {
-    this.rows[y][x] = LIVE_CELL;
+    this.rows[ y ][ x ] = LIVE_CELL;
 }
 
 Board.prototype.killCell = function( x, y ) {
-    this.rows[y][x] = DEAD_CELL;
+    this.rows[ y ][ x ] = DEAD_CELL;
 }
 
 Board.prototype.getCellNeighboursCount = function ( x, y ) {
@@ -72,9 +72,9 @@ Board.prototype.evolve = function () {
         row.forEach( function( cell, x, array) {
             var neighbours = self.getCellNeighboursCount( x, y );
             if ( ( neighbours < 2 || neighbours > 3 ) && self.isCellAlive( x, y ) ) {
-                birthsAndDeaths.push({ x: x, y: y, state: DEAD_CELL});
+                birthsAndDeaths.push( { x: x, y: y, state: DEAD_CELL} );
             } else if ( neighbours === 3 && !self.isCellAlive( x, y ) ) {
-                birthsAndDeaths.push({ x: x, y: y, state: LIVE_CELL});
+                birthsAndDeaths.push( { x: x, y: y, state: LIVE_CELL} );
             }
         });
     });
@@ -88,46 +88,46 @@ Board.prototype.evolve = function () {
 Board.prototype.render = function( container ) {
     var self = this;
 
-    var boardDiv = document.createElement('div');
+    var boardDiv = document.createElement( 'div' );
     var rowDiv = null;
     var cellDiv = null;
 
     container = container || 'container';
 
     self.rows.forEach(function( row, y ) {
-        rowDiv = document.createElement('div');
+        rowDiv = document.createElement( 'div' );
         rowDiv.className = 'row';
 
         row.forEach(function( cell, x ) {
-            cellDiv = document.createElement('div');
-            cellDiv.className = 'cell ' + (self.isCellAlive( x, y ) ? 'live' : 'dead');
-            rowDiv.appendChild(cellDiv);
+            cellDiv = document.createElement( 'div' );
+            cellDiv.className = 'cell ' + ( self.isCellAlive( x, y ) ? 'live' : 'dead' );
+            rowDiv.appendChild( cellDiv );
         });
 
-        boardDiv.appendChild(rowDiv);
+        boardDiv.appendChild( rowDiv );
     });
     boardDiv.className = 'board';
-    document.getElementsByClassName(container)[0].innerHTML = boardDiv.outerHTML;
+    document.getElementsByClassName( container )[ 0 ].innerHTML = boardDiv.outerHTML;
 }
 
 Board.prototype.getCoordinates = function( container ) {
     container = container || 'container';
 
-    var rows = document.getElementsByClassName('row');
+    var rows = document.getElementsByClassName( 'row' );
     var cells = null;
     var hasClass = false;
     var result = [];
 
     for ( var y = 0; y < rows.length; y++ ) {
-        cells = rows[y].children;
+        cells = rows[ y ].children;
         for ( var x = 0; x < cells.length; x++ ) {
-            if (cells[x].classList) {
-                hasClass = cells[x].classList.contains('live');
+            if ( cells[ x ].classList ) {
+                hasClass = cells[ x ].classList.contains( 'live' );
             } else {
-                hasClass = new RegExp('(^| )live( |$)', 'gi').test(cells[x].className);
+                hasClass = new RegExp( '(^| )live( |$)', 'gi' ).test( cells[x].className );
             }
             if ( hasClass ) {
-                result.push( { x: x, y: y });
+                result.push( { x: x, y: y } );
                 hasClass = false;
             }
         }
