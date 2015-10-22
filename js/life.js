@@ -1,137 +1,179 @@
+/*jslint browser: true */
+/*global document: false */
+/*jslint plusplus: true */
+
 var DEAD_CELL = 0;
 var LIVE_CELL = 1;
 
-function Board( size ) {
+function Board(size) {
+    'use strict';
+
     this.width = size;
     this.height = size;
 
     this.reset();
 }
 
-Board.prototype.reset = function() {
+Board.prototype.reset = function () {
+    'use strict';
+
+    var i;
     this.rows = [];
-    for ( var i = 0; i < this.height; i++ ) {
+
+    for (i = 0; i < this.height; i++) {
         this.addRow();
     }
-}
+};
 
-Board.prototype.initialize = function( cells ) {
-    for ( var i = 0; i < cells.length; i ++ ) {
-        this.createCell( cells[ i ].x, cells[ i ].y );
+Board.prototype.initialize = function (cells) {
+    'use strict';
+
+    var i;
+
+    for (i = 0; i < cells.length; i++) {
+        this.createCell(cells[i].x, cells[i].y);
     }
     this.render();
-}
+};
 
-Board.prototype.addRow = function() {
-    var row = [];
-    for ( var i = 0; i < this.width; i++ ) {
-        row.push( DEAD_CELL );
+Board.prototype.addRow = function () {
+    'use strict';
+
+    var i, row = [];
+
+    for (i = 0; i < this.width; i++) {
+        row.push(DEAD_CELL);
     }
-    this.rows.push( row );
-}
 
-Board.prototype.isPositionValid = function( x, y ) {
-    return ( x >= 0 && y >= 0 && x < this.width && y < this.height );
-}
+    this.rows.push(row);
+};
 
-Board.prototype.isCellAlive = function( x, y ) {
-    return this.isPositionValid( x, y ) && this.rows[ y ][ x ] === LIVE_CELL;
-}
+Board.prototype.isPositionValid = function (x, y) {
+    'use strict';
+    return (x >= 0 && y >= 0 && x < this.width && y < this.height);
+};
 
-Board.prototype.createCell = function( x, y ) {
-    this.rows[ y ][ x ] = LIVE_CELL;
-}
+Board.prototype.isCellAlive = function (x, y) {
+    'use strict';
+    return this.isPositionValid(x, y) && this.rows[y][x] === LIVE_CELL;
+};
 
-Board.prototype.killCell = function( x, y ) {
-    this.rows[ y ][ x ] = DEAD_CELL;
-}
+Board.prototype.createCell = function (x, y) {
+    'use strict';
+    this.rows[y][x] = LIVE_CELL;
+};
 
-Board.prototype.getCellNeighboursCount = function ( x, y ) {
+Board.prototype.killCell = function (x, y) {
+    'use strict';
+    this.rows[y][x] = DEAD_CELL;
+};
+
+Board.prototype.getCellNeighboursCount = function (x, y) {
+    'use strict';
 
     var neighbours = 0;
 
-    if ( this.isCellAlive( x - 1, y - 1  ) ) neighbours ++;
-    if ( this.isCellAlive( x, y - 1 ) ) neighbours ++;
-    if ( this.isCellAlive( x + 1, y - 1 ) ) neighbours ++;
+    if (this.isCellAlive(x, y - 1)) { neighbours++; }
+    if (this.isCellAlive(x, y + 1)) { neighbours++; }
 
-    if ( this.isCellAlive( x - 1, y ) ) neighbours ++;
-    if ( this.isCellAlive( x + 1, y ) ) neighbours ++;
+    if (this.isCellAlive(x + 1, y - 1)) { neighbours++; }
+    if (this.isCellAlive(x + 1, y)) { neighbours++; }
+    if (this.isCellAlive(x + 1, y + 1)) { neighbours++; }
 
-    if ( this.isCellAlive( x - 1, y + 1 ) ) neighbours ++;
-    if ( this.isCellAlive( x, y + 1 ) ) neighbours ++;
-    if ( this.isCellAlive( x + 1, y + 1 ) ) neighbours ++;
+    if (this.isCellAlive(x - 1, y)) { neighbours++; }
+    if (this.isCellAlive(x - 1, y + 1)) { neighbours++; }
+    if (this.isCellAlive(x - 1, y - 1)) { neighbours++; }
 
     return neighbours;
-}
+};
 
 Board.prototype.evolve = function () {
-   var self = this;
-   var birthsAndDeaths = [];
+    'use strict';
 
-    self.rows.forEach( function( row, y, array ) {
-        row.forEach( function( cell, x, array) {
-            var neighbours = self.getCellNeighboursCount( x, y );
-            if ( ( neighbours < 2 || neighbours > 3 ) && self.isCellAlive( x, y ) ) {
-                birthsAndDeaths.push( { x: x, y: y, state: DEAD_CELL} );
-            } else if ( neighbours === 3 && !self.isCellAlive( x, y ) ) {
-                birthsAndDeaths.push( { x: x, y: y, state: LIVE_CELL} );
+    var self = this,
+        birthsAndDeaths = [],
+        neighbours,
+        element,
+        i,
+        x,
+        y;
+
+    for (y = 0; y < self.rows.length; y++) {
+        for (x = 0; x < self.rows[y].length; x++) {
+            neighbours = self.getCellNeighboursCount(x, y);
+            if ((neighbours < 2 || neighbours > 3) && self.isCellAlive(x, y)) {
+                birthsAndDeaths.push({ x: x, y: y, state: DEAD_CELL});
+            } else if (neighbours === 3 && !self.isCellAlive(x, y)) {
+                birthsAndDeaths.push({ x: x, y: y, state: LIVE_CELL});
             }
-        });
-    });
+        }
+    }
 
-    birthsAndDeaths.forEach( function( element ) {
-        if ( element.state === DEAD_CELL ) self.killCell( element.x, element.y );
-        else self.createCell( element.x, element.y );
-    });
-}
+    for (i = 0; i < birthsAndDeaths.length; i++) {
+        element = birthsAndDeaths[i];
+        if (element.state === DEAD_CELL) {
+            self.killCell(element.x, element.y);
+        } else {
+            self.createCell(element.x, element.y);
+        }
+    }
+};
 
-Board.prototype.render = function( container ) {
-    var self = this;
+Board.prototype.render = function (container) {
+    'use strict';
 
-    var boardDiv = document.createElement( 'div' );
-    var rowDiv = null;
-    var cellDiv = null;
+    var self = this,
+        boardDiv = document.createElement('div'),
+        rowDiv,
+        cellDiv,
+        x,
+        y;
 
     container = container || 'container';
 
-    self.rows.forEach(function( row, y ) {
-        rowDiv = document.createElement( 'div' );
+    for (y = 0; y < self.rows.length; y++) {
+        rowDiv = document.createElement('div');
         rowDiv.className = 'row';
 
-        row.forEach(function( cell, x ) {
-            cellDiv = document.createElement( 'div' );
-            cellDiv.className = 'cell ' + ( self.isCellAlive( x, y ) ? 'live' : 'dead' );
-            rowDiv.appendChild( cellDiv );
-        });
+        for (x = 0; x < self.rows[y].length; x++) {
+            cellDiv = document.createElement('div');
+            cellDiv.className = 'cell ' + (self.isCellAlive(x, y) ? 'live' : 'dead');
+            rowDiv.appendChild(cellDiv);
+        }
 
-        boardDiv.appendChild( rowDiv );
-    });
+        boardDiv.appendChild(rowDiv);
+    }
+
     boardDiv.className = 'board';
-    document.getElementsByClassName( container )[ 0 ].innerHTML = boardDiv.outerHTML;
-}
+    document.getElementsByClassName(container)[0].innerHTML = boardDiv.outerHTML;
+};
 
-Board.prototype.getCoordinates = function( container ) {
+Board.prototype.getCoordinates = function (container) {
+    'use strict';
+
+    var rows = document.getElementsByClassName('row'),
+        cells,
+        hasClass = false,
+        result = [],
+        x,
+        y;
+
     container = container || 'container';
 
-    var rows = document.getElementsByClassName( 'row' );
-    var cells = null;
-    var hasClass = false;
-    var result = [];
-
-    for ( var y = 0; y < rows.length; y++ ) {
-        cells = rows[ y ].children;
-        for ( var x = 0; x < cells.length; x++ ) {
-            if ( cells[ x ].classList ) {
-                hasClass = cells[ x ].classList.contains( 'live' );
+    for (y = 0; y < rows.length; y++) {
+        cells = rows[y].children;
+        for (x = 0; x < cells.length; x++) {
+            if (cells[x].classList) {
+                hasClass = cells[x].classList.contains('live');
             } else {
-                hasClass = new RegExp( '(^| )live( |$)', 'gi' ).test( cells[x].className );
+                hasClass = new RegExp('(^| )live( |$)', 'gi').test(cells[x].className);
             }
-            if ( hasClass ) {
-                result.push( { x: x, y: y } );
+            if (hasClass) {
+                result.push({ x: x, y: y });
                 hasClass = false;
             }
         }
     }
 
     return result;
-}
+};
