@@ -107,9 +107,8 @@ window.onload = function () {
             isRunning = false;
             reset(board, timer, isRunning);
         } else {
-            var data = Patterns[this.value];
-            board.reset();
-            board.initialize(data);
+            var key = this.value.trim().split('.');
+            board.initialize(Patterns[key[0]][key[1]]);
         }
         return false;
     });
